@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from "react-router-dom";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import CloseIcon from '@material-ui/icons/Close';
@@ -7,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "./Navbar.css";
+import { isModuleDeclaration } from '@babel/types';
 
 
 class Navbar extends Component {
@@ -29,7 +31,7 @@ class Navbar extends Component {
         return (
             <header className='Navbar'>
                 <div className='logo'>
-                    <a href='#'>kevincolorpicker</a>
+                    <Link to='/'>kevincolorpicker</Link>
                 </div>
                 <div className='slider-container'>
                     <span>Level: {level}</span>
