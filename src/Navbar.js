@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "./Navbar.css";
-import { isModuleDeclaration } from '@babel/types';
 
 
 class Navbar extends Component {
@@ -78,3 +77,4 @@ class Navbar extends Component {
 }
 
 export default Navbar;
+
