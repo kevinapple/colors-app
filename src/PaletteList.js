@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/styles';
 const styles = {
     root: {
         backgroundColor:"blue",
-        height:"100%",
+        height:"100vh",
         display:"flex",
         alignItems:"flex-start",
         justifyContent:"center"
@@ -40,7 +40,7 @@ class PaletteList extends Component {
             <div className={classes.root}>
                 <div className={classes.container}>
                     <nav className={classes.nav}>
-                        <h1>React Colors</h1>
+                        <h1>Kevin's Colors</h1>
                     </nav>
                     <div className={classes.palettes}>
                         {palettes.map(palette => (
