@@ -114,3 +114,4 @@ export default {
         transitionDelay: "0.3s"
     }
 };
+
