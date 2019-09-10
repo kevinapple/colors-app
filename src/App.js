@@ -30,7 +30,7 @@ class App extends Component {
           path='/palette/new'
           render={routeProps => (
             <NewPaletteForm 
-              savePalette={this.savePalette} 
+              savePalette={this.savePalette}
               palettes={this.state.palettes}
               {...routeProps}
             />
