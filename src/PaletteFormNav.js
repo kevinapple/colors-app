@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
+import PaletteMetaForm from "./PaletteMetaForm";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,11 +12,53 @@ import clsx from 'clsx';
 import Button from "@material-ui/core/Button";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
+const drawerWidth = 400;
+
+const styles = theme => ({
+    root: {
+        display: "flex"
+      },
+      hide: {
+        display: "none"
+      },
+      appBar: {
+        transition: theme.transitions.create(["margin", "width"], {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.leavingScreen
+        }),
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: "64px"
+      },
+      appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+        transition: theme.transitions.create(["margin", "width"], {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen
+        })
+      },
+      menuButton: {
+        marginLeft: 12,
+        marginRight: 20
+      },
+      navBtns: {
+        marginRight: "1rem",
+        "& a": {
+          textDecoration: "none"
+        }
+      },
+      button:{
+        margin:"0 0.5rem"
+      }
+    });
 class PaletteFormNav extends Component {
     constructor(props){
         super(props);
-        this.state={newPaletteName:""};
+        this.state={newPaletteName:"",formShowing: false };
         this.handleChange = this.handleChange.bind(this);
+        this.showForm = this.showForm.bind(this);
     }
     componentDidMount() {
         ValidatorForm.addValidationRule("isPaletteNameUnique", value =>
@@ -29,11 +72,14 @@ class PaletteFormNav extends Component {
           [evt.target.name]:evt.target.value
         });
       }
+      showForm(){
+        this.setState({formShowing:true})
+      }
     render() {
-        const {classes,open} = this.props;
+        const {classes,open,palettes,handleSubmit} = this.props;
         const {newPaletteName} = this.state;
         return (
-            <div>
+            <div className={classes.root}>
                 <CssBaseline />
                 <AppBar
                     position="fixed"
@@ -43,46 +89,34 @@ class PaletteFormNav extends Component {
                     })}
                 >
                     <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={this.props.handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, open && classes.hide)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Persistent drawer
-                    </Typography>
-                    <ValidatorForm onSubmit={()=>this.props.handleSubmit(newPaletteName)}>
-                        <TextValidator 
-                        label="Palette Name"
-                        value={this.state.newPaletteName}
-                        name="newPaletteName"
-                        onChange={this.handleChange}
-                        validators={["required","isPaletteNameUnique"]}
-                        errorMessages={["Enter Palette Name","Name already used"]}
-                        />
-                        <Button 
-                        variant="contained" 
-                        color="primary"
-                        type='submit'
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={this.props.handleDrawerOpen}
+                            edge="start"
+                            className={clsx(classes.menuButton, open && classes.hide)}
                         >
-                        Save Palette
-                        </Button>
-                        <Link to='/'>
-                        <Button variant='contained' color='secondary'>
-                            Go Back
-                        </Button>
-                        </Link>
-                    </ValidatorForm>
-                    
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap>
+                            Create A Palette
+                        </Typography>
                     </Toolbar>
+                    <div className={classes.navBtns}>
+                        <Link to='/'>
+                            <Button variant='contained' color='secondary' className={classes.button}>
+                                Go Back
+                            </Button>
+                        </Link>
+                        <Button variant="contained" color="primary" onClick={this.showForm} className={classes.button}>
+                          Save
+                        </Button>
+                    </div>
                 </AppBar>
+                { this.state.formShowing && <PaletteMetaForm palettes={palettes} handleSubmit={handleSubmit}/>}
             </div>
-        )
+        );
     }
 }
 
-export default PaletteFormNav;
+export default withStyles(styles, { withTheme: true })(PaletteFormNav); 
