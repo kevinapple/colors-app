@@ -12,6 +12,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { withStyles } from "@material-ui/styles";
 import MiniPalette from "./MiniPalette";
+import Button from '@material-ui/core/Button';
 import blue from "@material-ui/core/colors/blue";
 import red from "@material-ui/core/colors/red";
 import styles from "./styles/PaletteListStyles";
@@ -21,12 +22,16 @@ class PaletteList extends Component {
     super(props);
     this.state = {
       openDeleteDialog: false,
+      openResetDialog: false,
       deletingId: ""
     };
     this.openDialog = this.openDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleReset = this.handleReset.bind(this);
     this.goToPalette = this.goToPalette.bind(this);
+    this.openResetDialog = this.openResetDialog.bind(this);
+    this.closeResetDialog = this.closeResetDialog.bind(this);
   }
   openDialog(id) {
     this.setState({ openDeleteDialog: true, deletingId: id });
@@ -37,18 +42,29 @@ class PaletteList extends Component {
   goToPalette(id) {
     this.props.history.push(`/palette/${id}`);
   }
+  openResetDialog(id) {
+    this.setState({ openResetDialog: true });
+  }
+  handleReset(){
+    this.props.resetPaletteList();
+    this.closeResetDialog();
+}
   handleDelete() {
     this.props.deletePalette(this.state.deletingId);
     this.closeDialog();
   }
+  closeResetDialog (){
+    this.setState({ openResetDialog: false })
+  }
   render() {
     const { palettes, classes } = this.props;
-    const { openDeleteDialog } = this.state;
+    const { openDeleteDialog, openResetDialog } = this.state;
     return (
       <div className={classes.root}>
         <div className={classes.container}>
           <nav className={classes.nav}>
             <h1 className={classes.heading}>Kevin Colors</h1>
+            <Button variant={"outlined"} className={classes.button} onClick={this.openResetDialog}>Reset</Button>
             <Link to='/palette/new'>Create Palette</Link>
           </nav>
           <TransitionGroup className={classes.palettes}>
@@ -94,6 +110,35 @@ class PaletteList extends Component {
             </ListItem>
           </List>
         </Dialog>
+        <Dialog 
+            open={openResetDialog} 
+            aria-labelledby="reset-dialog-title"
+            onClose={this.closeResetDialog}
+        >
+            <DialogTitle id="reset-dialog-title">Restore default Colors?</DialogTitle>
+              <List>
+                            <ListItem button onClick={this.handleReset}>
+                                <ListItemAvatar>
+                                    <Avatar
+                                        style={{ backgroundColor:blue[100], color: blue[600] }}
+                                    >
+                                        <CheckIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary="Reset" />
+                            </ListItem>
+                            <ListItem button onClick={this.closeResetDialog}>
+                                <ListItemAvatar>
+                                    <Avatar
+                                        style={{ backgroundColor:red[100], color: red[600] }}
+                                    >
+                                        <CloseIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary="Cancel" />
+                            </ListItem>
+                        </List>
+                </Dialog>
       </div>
     );
   }
